@@ -22,8 +22,6 @@ import matplotlib
 matplotlib.use('Agg')  # Set the backend to 'Agg'
 import matplotlib.pyplot as plt
 
-import myutils
-
 class MyDataset(torch.utils.data.Dataset):
     def __init__(self, img_list, img_labels=None ,transform = None, is_labeled=True, labels_dict=None):
         self.img_list = img_list
@@ -373,7 +371,7 @@ def main(args):
     else:
         # Inference
         # Locate and Load data
-        unique_ids = glob.glob(f"{image_dir}**/*.jpg")
+        unique_ids = glob.glob(f"{image_dir}/**/*.jpg", recursive=True)
 
         print(f"Attempting to classify {len(unique_ids)} images.")
 

@@ -14,6 +14,7 @@ from torch.optim import lr_scheduler
 import torch.backends.cudnn as cudnn
 from torch.utils.data import DataLoader
 from torchvision import models, transforms
+from torchvision.models import ResNet18_Weights
 import matplotlib.pyplot as plt
 from sklearn.model_selection import StratifiedShuffleSplit
 
@@ -238,7 +239,7 @@ def main(image_dir,output_name,num_epochs,num_sample):
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    model_ft = models.resnet18(pretrained=True)
+    model_ft = models.resnet18(weights=ResNet18_Weights.DEFAULT)
     num_ftrs = model_ft.fc.in_features
     model_ft.fc = nn.Linear(num_ftrs, 2)
     model_ft = model_ft.to(device)
@@ -259,7 +260,7 @@ def main(image_dir,output_name,num_epochs,num_sample):
     # Save model loss for later plotting/inspection
     with open(os.path.join(output_name,'model-loss-hist.dat'),'wb') as f:
         pickle.dump(loss_history,f)
-    
+
     # Save Figure of Model Loss
     plt.title("Train-Val Loss")
     plt.plot(range(1,num_epochs+1),loss_history["train"],label="Training")
@@ -275,10 +276,13 @@ def main(image_dir,output_name,num_epochs,num_sample):
     with open(os.path.join(output_name,'model-metric-hist.dat'),'wb') as f:
         pickle.dump(metric_history,f)
 
+    train_acc = [acc.cpu().item() for acc in metric_history["train"]]
+    val_acc = [acc.cpu().item() for acc in metric_history["val"]]
+
     # Save Figure of Model Accuracy
     plt.title("Train-Val Accuracy")
-    plt.plot(range(1,num_epochs+1), metric_history["train"],label="Training")
-    plt.plot(range(1,num_epochs+1), metric_history["val"],label="Validation")
+    plt.plot(range(1,num_epochs+1), train_acc,label="Training")
+    plt.plot(range(1,num_epochs+1), val_acc,label="Validation")
     plt.xticks(range(0,num_epochs+1,2))
     plt.ylabel("Accuracy")
     plt.xlabel("Training Epochs")
@@ -290,8 +294,8 @@ def main(image_dir,output_name,num_epochs,num_sample):
     plt.title("Train-Val Accuracy & Loss")
     plt.plot(range(1,num_epochs+1),loss_history["train"],label="Training Loss")
     plt.plot(range(1,num_epochs+1),loss_history["val"],label="Validation Loss")
-    plt.plot(range(1,num_epochs+1), metric_history["train"],label="Training Accuracy")
-    plt.plot(range(1,num_epochs+1), metric_history["val"],label="Validation Accuracy")
+    plt.plot(range(1,num_epochs+1), train_acc,label="Training Accuracy")
+    plt.plot(range(1,num_epochs+1), val_acc,label="Validation Accuracy")
     plt.xticks(range(0,num_epochs+1,2))
     plt.ylabel("Accuracy / Loss")
     plt.xlabel("Training Epochs")

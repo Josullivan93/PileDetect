@@ -7,7 +7,6 @@ Briefly this repository comprises:
 - The Python script to apply the model to novel data
 - The model weightings produced and used in the paper
 - A reduced sample of video frames on which to train a model from scratch
-- This ReadMe
 
 ## Set Up
 
@@ -28,25 +27,25 @@ A CUDA compatible GPU is suggested. If CUDA is not available the script will def
 
 ## Usage
 
-Images on which the model is to be run should be of JPG format and saved in subdirectories named either PILING or NONPILING. An example of this can be seen in the provided SampleImg directory.
+Images on which the model is to be trained should be of JPG format and saved in subdirectories named either PILING or NONPILING. An example of this can be seen in the provided Sample_Images directory. If attempting Inference from a trained model images should be JPG format but subdirectories with classification labels are only required if validating, and generating performance metrics from, the model.
 
 ### Training
 
-To train the model run the script ".py" from your terminal. The script requires both a directory containing a sample of labelled images upon which to train the model, and a path to a directory for the model output are specified. In addition the number of training epochs and samples used for each class can be provided (defaulting to 20 epoch and 5000 samples is respectively not provided).
+To train the model run the script "Pile-Detect-Training.py" from your terminal. The script requires both a directory containing a sample of labelled images upon which to train the model, and a path to a directory for the model output are specified. In addition the number of training epochs and samples used for each class can be provided (defaulting to 20 epoch and 5000 samples respectively if not provided).
 
-For example the following command will locate the images stored in the "SampleImg" directory, train the model over 20 epochs, with 10000 Piling samples and 10000 Non-Piling samples, and save the result in a directory named "OutDir":
+For example the following command will locate the images stored in the "Sample_Images" directory (within their label subdirectories), train the model over 20 epochs, with 5000 Piling samples and 5000 Non-Piling samples, and save the result in a directory named "Output":
 
-```python pile-detect-training.py "SampleImg" "OutDir" 20 10000```
+```python pile-detect-training.py Sample_Images Output 20 5000```
 
 Figures displaying the training accuracy and loss across epochs will be produced and saved to the working directory.
 
 ### Inference
 
-To use trained model weightings to perform inference, either that provided in the "TrainedModel.dat" file or one trained yourself using the "pile-detect-training.py" script, run the "pile-detect-inference.py" script. When run from the terminal the script requires a path to a model weighting .dat file (or simply the file name if held in the current working directory) and the path to a directory containing the images to be classified. To use this script to validate a generated model on pre-labelled data, and generate appropriate performance metrics, a "Validate" argument can be added when running from the terminal. If validating then images passed to the script should be organised in subdirectories as with Training and shown in the SampleImg directory of this repository. An optional Validation Sample Size argument can also be included to specificy the number of each class to include in the validation inference. If validation is not required omit these arguments and all images within the passed directory, and its subdirectories, will be classified. For example to run the script to validate using 5000 prelabelled images (2500 of each class) stored in a directory named "ValidationImg", with weightings from "TrainedModel.dat": 
+To use trained model weightings to perform inference, either those provided in the "TrainedModel.dat" file or one trained yourself using the "pile-detect-training.py" script, run the "pile-detect-inference.py" script. When run from the terminal the script requires a path to a model weighting .dat file (or simply the file name if held in the current working directory) and the path to a directory containing the images to be classified. To use this script to validate a generated model on pre-labelled data, and generate appropriate performance metrics, a "Validate" flag (either -v or --validate) can be set when running from the terminal. If validating then images passed to the script should be organised in subdirectories as with Training and as demonstrated in the Sample_Images directory of this repository. An optional Validation Sample Size argument can also be included (after an -n or --nsamples flag) to specificy the number of each class to include in the validation inference. If wanting to generate samples of misclassified images from the validation the -m (or --misclass) flag can be set alongside the -v flag. If validation is not required omit these flags and all images within the passed directory, and its subdirectories, will be classified. For example to run the script to validate using 5000 prelabelled images (2500 of each class) stored in a directory named "Sample_Images", with weightings from "TrainedModel.dat", and generate the sample images from this validation the command would look like: 
 
-```python pile-detect-inference.py "ValidationImg" "TrainedModel.dat" Validate 2500```
+```python pile-detect-inference.py Sample_Images TrainedModel.dat -v -n 2500 -m```
 
-Figures showing the ROC curve, Precision-Recall curve, and selections of misclassified frames will be produced for inspecition and saved to the working directory if the Validate argument is used alongside a CSV of performance metrics (Accuracy, F1 Measure, Precision, Recall, Specificity, ROC curve AUC, Precision-Recall Curve AUC, and Numbers of True Positives, False Positives, True Negatives, and False Negatives). A list of filenames and classifications will be generated both with and without the Validate argument.
+Figures showing the ROC curve, and Precision-Recall curve will be produced whenever the validation flag is set and will be saved to the working directory alongside a CSV of performance metrics (Accuracy, F1 Measure, Precision, Recall, Specificity, ROC curve AUC, Precision-Recall Curve AUC, and Numbers of True Positives, False Positives, True Negatives, and False Negatives). A list of filenames and classifications will be generated both when validating and when performing inference on unclassified images.
 
 ## Credits
 A  full description of Author contributions to this code and accompanying manuscript can be found in the manuscript.
