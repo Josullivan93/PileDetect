@@ -12,6 +12,7 @@ Briefly this repository comprises:
 
 Use your chosen package manager to install the required packages.
 It is recommended to use a dedicated virtual environment with Conda. A YAML file with all dependencies required is included. To create a new environment in Conda using the YAML file use:
+
 ```conda env create -f PileDetect.yaml```
 
 If you do not wish to use this environment file the packages required are:
@@ -47,8 +48,25 @@ To use trained model weightings to perform inference, either those provided in t
 
 Figures showing the ROC curve, and Precision-Recall curve will be produced whenever the validation flag is set and will be saved to the working directory alongside a CSV of performance metrics (Accuracy, F1 Measure, Precision, Recall, Specificity, ROC curve AUC, Precision-Recall Curve AUC, and Numbers of True Positives, False Positives, True Negatives, and False Negatives). A list of filenames and classifications will be generated both when validating and when performing inference on unclassified images.
 
+## Citation
+
+If you use this repository or dataset in your work, please cite both the paper and the dataset repository:
+
+- **Paper:** Jack O'Sullivan, Helen E. Gray, Genevieve Moat, Lucy Asher; Automated detection of piling behaviour in UK laying hen flocks. R. Soc. Open Sci. 1 May 2026; 13 (5): 252462. https://doi.org/10.1098/rsos.252462
+
+- **Repository:** Jack O'Sullivan, Helen Gray, Genevieve Jiawei Moat, Lucy Asher; Automated detection of piling behaviour in UK laying hen flocks - Python Scripts, Model Weights & Sample Images. *Figshare*. https://doi.org/10.25405/data.ncl.28654664
+
+## License
+This repository uses dual-licensing to distinguish between software/model assets and image dataset assets:
+
+- **Source Code, Environment & Model Weights (GPL 3.0+):** 
+  The Python scripts (`pile-detect-training.py`, `pile-detect-inference.py`), environment setup (`PileDetect.yaml`), and trained model weightings (`TrainedModel.dat`) are licensed under the **GNU General Public License v3.0**.
+
+- **Sample Image Dataset (CC BY 4.0):** 
+  All `.jpg` sample image frames contained within the `Sample_Images/` directory (including `Sample_Images/PILING/` and `Sample_Images/NONPILING/`) are licensed under **Creative Commons Attribution 4.0 International (CC BY 4.0)**, matching the open access license of the published paper (*R. Soc. Open Sci.*, doi: [10.1098/rsos.252462](https://doi.org/10.1098/rsos.252462)).
+
 ## Credits
 A  full description of Author contributions to this code and accompanying manuscript can be found in the manuscript.
 
 The code given here is based on initial exploration and implementation work performed by the Newcastle University Research Software Engineering team, with specific thanks to Drs Mark Turner, Kathryn Garside and Robin Nandi. 
-The scripts and methodology were further developed and expanded upon by Genevieve Moat. Final development, implementation and validation was performed by Jack O'Sullivan.
+The scripts and methodology were further developed and expanded upon by Genevieve Moat. Final development, implementation and validation was performed by Jack O'Sullivan.****
